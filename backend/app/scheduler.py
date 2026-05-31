@@ -7,7 +7,7 @@ from app.db.database import SessionLocal
 from app.models.source import Source
 from app.services.detector import persist_new_jobs
 from app.services.notifier import notify_job
-from app.services.scraper import scrape_gupy
+from app.services.scraper import scrape_jobs
 
 
 scheduler = BackgroundScheduler()
@@ -21,7 +21,7 @@ def run_source(source_id: str) -> int:
         if not source:
             return 0
 
-        scraped_jobs = scrape_gupy(source.search_term, source.url)
+        scraped_jobs = scrape_jobs(source.search_term, source.url)
         new_jobs = persist_new_jobs(db, source, scraped_jobs)
 
         notified_count = 0

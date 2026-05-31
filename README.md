@@ -2,7 +2,7 @@
 
 ## O que o projeto faz
 
-Job Scraper monitora vagas no portal Gupy a partir de fontes configuradas, salva vagas novas em PostgreSQL, evita duplicatas por URL e envia notificacoes por email. O WhatsApp via Evolution API e opcional.
+Job Scraper monitora vagas remotas pela API publica da Remotive a partir de fontes configuradas, salva vagas novas em PostgreSQL, evita duplicatas por URL e envia notificacoes por email. O WhatsApp via Evolution API e opcional.
 
 ## Stack
 

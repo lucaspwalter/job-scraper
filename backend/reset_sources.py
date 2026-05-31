@@ -1,4 +1,5 @@
 from app.db.database import Base, SessionLocal, engine
+from app.models.job import Job
 from app.models.source import Source
 from app.services.scraper import build_search_url
 
@@ -14,11 +15,10 @@ def main():
     Base.metadata.create_all(bind=engine)
     db = SessionLocal()
     try:
-        for source_data in SOURCES:
-            exists = db.query(Source).filter(Source.name == source_data["name"]).first()
-            if exists:
-                continue
+        db.query(Job).delete()
+        db.query(Source).delete()
 
+        for source_data in SOURCES:
             db.add(
                 Source(
                     name=source_data["name"],
@@ -28,7 +28,9 @@ def main():
                     is_active=True,
                 )
             )
+
         db.commit()
+        print("Sources e jobs resetados.")
     finally:
         db.close()
 

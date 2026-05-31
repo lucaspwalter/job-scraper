@@ -3,7 +3,7 @@ from urllib.parse import quote_plus
 import httpx
 
 
-GUPY_API_URL = "https://portal.gupy.io/api/job-search/v1/jobs?jobName={search_term}&limit=20"
+REMOTIVE_API_URL = "https://remotive.com/api/remote-jobs?search={search_term}&limit=20"
 BROWSER_HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (X11; Linux x86_64) "
@@ -14,7 +14,7 @@ BROWSER_HEADERS = {
 
 
 def build_search_url(search_term: str) -> str:
-    return GUPY_API_URL.format(search_term=quote_plus(search_term))
+    return REMOTIVE_API_URL.format(search_term=quote_plus(search_term))
 
 
 def fetch_jobs(search_term: str) -> list[dict]:
@@ -23,22 +23,19 @@ def fetch_jobs(search_term: str) -> list[dict]:
         response.raise_for_status()
         content_type = response.headers.get("content-type", "")
         if "application/json" not in content_type:
-            raise RuntimeError("Gupy API did not return JSON")
+            raise RuntimeError("Remotive API did not return JSON")
 
         data = response.json()
 
-    if isinstance(data, list):
-        return data
-
-    return data.get("data", data.get("jobs", []))
+    return data.get("jobs", [])
 
 
-def scrape_gupy(search_term: str, url: str | None = None) -> list[dict]:
+def scrape_jobs(search_term: str, url: str | None = None) -> list[dict]:
     jobs = []
 
     for job in fetch_jobs(search_term):
-        title = job.get("name")
-        job_url = job.get("jobUrl")
+        title = job.get("title")
+        job_url = job.get("url")
 
         if not title or not job_url:
             continue
@@ -46,7 +43,7 @@ def scrape_gupy(search_term: str, url: str | None = None) -> list[dict]:
         jobs.append(
             {
                 "title": title,
-                "company": job.get("careerPageName"),
+                "company": job.get("company_name"),
                 "url": job_url,
             }
         )
