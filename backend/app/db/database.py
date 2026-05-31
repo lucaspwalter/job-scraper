@@ -9,7 +9,7 @@ load_dotenv()
 
 DATABASE_URL = os.getenv(
     "DATABASE_URL",
-    "postgresql://jobscraper:jobscraper@localhost:5432/jobscraper",
+    "postgresql+psycopg://jobscraper:jobscraper@localhost:5432/jobscraper",
 )
 
 engine = create_engine(DATABASE_URL)
