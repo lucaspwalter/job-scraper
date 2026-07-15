@@ -1,4 +1,5 @@
 from app.db.database import Base, SessionLocal, engine
+from app.models.job import Job  # noqa: F401 - registra relacionamento no SQLAlchemy
 from app.models.source import Source
 from app.services.scraper import build_search_url
 

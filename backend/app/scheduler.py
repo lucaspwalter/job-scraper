@@ -4,6 +4,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from sqlalchemy.orm import Session
 
 from app.db.database import SessionLocal
+from app.models.job import Job
 from app.models.source import Source
 from app.services.detector import persist_new_jobs
 from app.services.notifier import notify_job
@@ -13,25 +14,31 @@ from app.services.scraper import scrape_jobs
 scheduler = BackgroundScheduler()
 
 
-def run_source(source_id: str) -> int:
+def run_source(source_id: str) -> dict:
     db: Session = SessionLocal()
     try:
         source_uuid = uuid.UUID(str(source_id))
         source = db.query(Source).filter(Source.id == source_uuid, Source.is_active.is_(True)).first()
         if not source:
-            return 0
+            return {"found": 0, "notified": 0}
 
         scraped_jobs = scrape_jobs(source.search_term, source.url)
         new_jobs = persist_new_jobs(db, source, scraped_jobs)
 
+        pending_jobs = (
+            db.query(Job)
+            .filter(Job.source_id == source.id, Job.notified.is_(False))
+            .order_by(Job.found_at.asc())
+            .all()
+        )
         notified_count = 0
-        for job in new_jobs:
+        for job in pending_jobs:
             if notify_job(job):
                 job.notified = True
                 notified_count += 1
 
         db.commit()
-        return notified_count
+        return {"found": len(new_jobs), "notified": notified_count}
     finally:
         db.close()
 
@@ -45,7 +52,8 @@ def run_all_sources() -> dict:
 
     results = []
     for source in sources:
-        results.append({"source_id": str(source.id), "notified": run_source(str(source.id))})
+        result = run_source(str(source.id))
+        results.append({"source_id": str(source.id), **result})
 
     return {"sources_processed": len(results), "results": results}
 

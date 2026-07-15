@@ -1,93 +1,124 @@
+<p align="center">
+  <img src="assets/mascot/pip_flight_loop.gif" alt="Mascote do Job Scraper" width="200">
+</p>
+
 # Job Scraper
 
-## O que é
+Monitor local de vagas com backend FastAPI, frontend React e workflows para OpenAI Codex. Projeto feito para centralizar fontes, coletar vagas, evitar duplicatas e apoiar avaliação, candidatura e preparação para entrevistas.
 
-Acompanhar vagas manualmente em vários sites é trabalhoso, repetitivo e aumenta a chance de perder oportunidades novas. Quando a busca depende de abrir páginas todos os dias, comparar resultados e lembrar o que já foi visto, o processo fica pouco confiável.
-
-Job Scraper automatiza esse acompanhamento. O projeto monitora fontes configuráveis, identifica vagas novas por URL única, salva o histórico em banco de dados e envia notificações quando encontra uma oportunidade ainda não registrada.
-
-## Portfólio
-
-Este projeto faz parte do meu portfólio:
-
-https://lucaspwalter.github.io/portfolio/
+Adaptação independente para Codex; não afiliada nem mantida pela OpenAI. Workflows de candidatura baseados no projeto `ai-job-search`, de Mads Lorentzen, sob licença MIT.
 
 ## Como funciona
 
-- Monitoramento de fontes de vagas configuráveis com intervalo por fonte
-- Detecção automática de vagas novas por URL única
-- Notificação por email via SMTP ao encontrar vaga nova
-- Notificação opcional via WhatsApp com Evolution API
-- Interface web para gerenciar fontes e visualizar histórico de vagas
+- Backend consulta fontes configuradas, normaliza vagas e salva dados em PostgreSQL no Docker ou SQLite no modo manual.
+- Frontend permite gerenciar fontes e visualizar resultados.
+- Agendador executa buscas periódicas.
+- Email e WhatsApp são opcionais e ficam desativados sem credenciais.
+- `.agents/skills/` contém workflows usados pelo Codex, incluindo `$setup`, `$scrape`, `$rank`, `$apply` e `$interview`.
 
-## Notificações por email
+## Rodar com Docker — recomendado
 
-- Usa smtplib nativo do Python, sem dependência externa
-- Requer conta Gmail com senha de app
-- Link para criar senha de app: https://myaccount.google.com/apppasswords
+Pré-requisitos: Git e Docker Desktop/Engine com Compose.
 
-## Notificações WhatsApp
-
-- Opcional — só funciona se Evolution API estiver configurada
-- Documentação: https://doc.evolution-api.com
-
-## Tecnologias
-
-- Python
-- FastAPI
-- SQLAlchemy
-- PostgreSQL
-- APScheduler
-- React
-
-## Como rodar localmente
-
-As instruções completas de instalação e execução estão disponíveis na página do projeto no portfólio:
-
-https://lucaspwalter.github.io/portfolio/
-
-## Estrutura do projeto
-
-```text
-job-scraper/
-├── backend/
-│   ├── app/
-│   │   ├── api/
-│   │   │   ├── __init__.py
-│   │   │   ├── jobs.py
-│   │   │   ├── scheduler.py
-│   │   │   └── sources.py
-│   │   ├── db/
-│   │   │   ├── __init__.py
-│   │   │   └── database.py
-│   │   ├── models/
-│   │   │   ├── __init__.py
-│   │   │   ├── job.py
-│   │   │   └── source.py
-│   │   ├── services/
-│   │   │   ├── __init__.py
-│   │   │   ├── detector.py
-│   │   │   ├── notifier.py
-│   │   │   └── scraper.py
-│   │   └── scheduler.py
-│   ├── .env.example
-│   ├── clean_jobs.py
-│   ├── main.py
-│   ├── requirements.txt
-│   ├── reset_sources.py
-│   └── seed.py
-├── frontend/
-│   ├── src/
-│   │   ├── pages/
-│   │   │   ├── Jobs.jsx
-│   │   │   └── Sources.jsx
-│   │   ├── api.js
-│   │   ├── App.jsx
-│   │   ├── main.jsx
-│   │   └── styles.css
-│   ├── index.html
-│   ├── package-lock.json
-│   └── package.json
-├── .gitignore
-└── README.md
+```bash
+git clone https://github.com/lucaspwalter/job-scraper.git
+cd job-scraper
+docker compose up --build
 ```
+
+Acesse:
+
+- Interface: http://localhost:5173
+- API: http://localhost:8000
+- Documentação da API: http://localhost:8000/docs
+
+Parar:
+
+```bash
+docker compose down
+```
+
+## Rodar manualmente — Linux/macOS
+
+Requer Python 3.10+ e Node.js 20+.
+
+Terminal 1:
+
+```bash
+cd backend
+cp .env.example .env
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python3 seed.py
+python3 main.py
+```
+
+Terminal 2:
+
+```bash
+cd frontend
+npm install
+npm start
+```
+
+## Rodar manualmente — Windows PowerShell
+
+Terminal 1:
+
+```powershell
+Set-Location backend
+Copy-Item .env.example .env
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+py seed.py
+py main.py
+```
+
+Terminal 2:
+
+```powershell
+Set-Location frontend
+npm install
+npm start
+```
+
+Se PowerShell bloquear ativação do ambiente, execute uma vez:
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+```
+
+## Usar com Codex
+
+Na raiz do projeto:
+
+```bash
+codex
+```
+
+Depois execute `$setup`. Dados pessoais gerados ficam ignorados pelo Git. Principais comandos:
+
+- `$scrape`: busca vagas.
+- `$rank`: classifica resultados.
+- `$apply <URL>`: avalia vaga e prepara candidatura.
+- `$interview`: prepara entrevista.
+
+## Configuração opcional
+
+Edite `backend/.env` para notificações. Variáveis `SMTP_*`, `EVOLUTION_*` e `NOTIFY_*` podem permanecer vazias.
+
+## Dados privados
+
+Não publique `.env`, banco SQLite, CVs pessoais, cartas geradas, documentos, rastreadores ou resultados de busca. `.gitignore` já protege esses caminhos.
+
+## Testes
+
+```bash
+python3 -m unittest discover -s tests
+```
+
+## Licença
+
+MIT. Veja `LICENSE`.

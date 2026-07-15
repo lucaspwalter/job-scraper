@@ -1,8 +1,7 @@
 import uuid
 from datetime import datetime
 
-from sqlalchemy import Boolean, Column, DateTime, Integer, String
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import Boolean, Column, DateTime, Integer, String, Uuid
 from sqlalchemy.orm import relationship
 
 from app.db.database import Base
@@ -11,7 +10,7 @@ from app.db.database import Base
 class Source(Base):
     __tablename__ = "sources"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4)
     name = Column(String, nullable=False)
     url = Column(String, nullable=False)
     search_term = Column(String, nullable=False)

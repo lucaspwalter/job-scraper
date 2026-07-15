@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime
 
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy.orm import Session
 
 from app.db.database import get_db
@@ -18,7 +18,7 @@ class SourceBase(BaseModel):
     name: str
     search_term: str
     url: str | None = None
-    interval_minutes: int = 30
+    interval_minutes: int = Field(default=30, ge=1)
     is_active: bool = True
 
 
@@ -30,7 +30,7 @@ class SourceUpdate(BaseModel):
     name: str | None = None
     search_term: str | None = None
     url: str | None = None
-    interval_minutes: int | None = None
+    interval_minutes: int | None = Field(default=None, ge=1)
     is_active: bool | None = None
 
 

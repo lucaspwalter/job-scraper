@@ -16,6 +16,7 @@ export default function Sources() {
   const [form, setForm] = useState(emptyForm);
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
   async function loadSources() {
     const response = await api.get("/sources");
@@ -72,8 +73,14 @@ export default function Sources() {
 
   async function runNow() {
     setLoading(true);
+    setMessage("");
     try {
-      await api.post("/scheduler/run");
+      const response = await api.post("/scheduler/run");
+      const found = response.data.results.reduce((sum, item) => sum + item.found, 0);
+      const notified = response.data.results.reduce((sum, item) => sum + item.notified, 0);
+      setMessage(`${found} nova(s), ${notified} notificada(s).`);
+    } catch (error) {
+      setMessage(error.response?.data?.detail || error.message || "Falha ao buscar vagas.");
     } finally {
       setLoading(false);
     }
@@ -90,6 +97,8 @@ export default function Sources() {
           {loading ? "Rodando..." : "Rodar agora"}
         </button>
       </div>
+
+      {message && <p className="run-message">{message}</p>}
 
       <form className="panel source-form" onSubmit={saveSource}>
         <input

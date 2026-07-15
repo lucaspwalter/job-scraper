@@ -1,0 +1,40 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: jobscraper
+      POSTGRES_PASSWORD: jobscraper
+      POSTGRES_DB: jobscraper
+    volumes:
+      - jobscraper_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U jobscraper -d jobscraper"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  backend:
+    image: python:3.12-slim
+    working_dir: /app
+    command: sh -c "pip install --no-cache-dir -r requirements.txt && python seed.py && python main.py"
+    environment:
+      DATABASE_URL: postgresql+psycopg://jobscraper:jobscraper@db:5432/jobscraper
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build: ./frontend
+    environment:
+      VITE_API_URL: http://localhost:8000
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+volumes:
+  jobscraper_db:
