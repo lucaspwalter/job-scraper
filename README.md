@@ -4,11 +4,15 @@
 
 # Job Scraper
 
-Local job monitor with a FastAPI backend, React frontend, and workflows for OpenAI Codex. Built to centralize sources, collect job listings, prevent duplicates, and support evaluation, applications, and interview preparation.
+Local job monitoring platform with a FastAPI backend, React frontend, and OpenAI Codex workflows.
+
+## Overview
+
+Job Scraper centralizes sources, collects job listings, prevents duplicates, and supports evaluation, applications, and interview preparation.
 
 Independent Codex adaptation; neither affiliated with nor maintained by OpenAI. Application workflows are based on Mads Lorentzen's `ai-job-search` project, licensed under MIT.
 
-## How it works
+## Features
 
 - The backend queries configured sources, normalizes listings, and stores data in PostgreSQL with Docker or SQLite in manual mode.
 - The frontend lets users manage sources and view results.
@@ -16,7 +20,18 @@ Independent Codex adaptation; neither affiliated with nor maintained by OpenAI. 
 - Email and WhatsApp are optional and remain disabled without credentials.
 - `.agents/skills/` contains Codex workflows, including `$setup`, `$scrape`, `$rank`, `$apply`, and `$interview`.
 
-## Running with Docker — recommended
+## Tech Stack
+
+- Python and FastAPI
+- React
+- PostgreSQL with Docker
+- SQLite for manual local setup
+- Docker Compose
+- OpenAI Codex workflows
+
+## Getting Started
+
+### Docker — recommended
 
 Requirements: Git and Docker Desktop/Engine with Compose.
 
@@ -38,7 +53,7 @@ To stop:
 docker compose down
 ```
 
-## Running manually — Linux/macOS
+### Manual setup — Linux/macOS
 
 Requires Python 3.10+ and Node.js 20+.
 
@@ -62,7 +77,7 @@ npm install
 npm start
 ```
 
-## Running manually — Windows PowerShell
+### Manual setup — Windows PowerShell
 
 Terminal 1:
 
