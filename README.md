@@ -1,24 +1,24 @@
 <p align="center">
-  <img src="assets/mascot/pip_flight_loop.gif" alt="Mascote do Job Scraper" width="200">
+  <img src="assets/mascot/pip_flight_loop.gif" alt="Job Scraper mascot" width="200">
 </p>
 
 # Job Scraper
 
-Monitor local de vagas com backend FastAPI, frontend React e workflows para OpenAI Codex. Projeto feito para centralizar fontes, coletar vagas, evitar duplicatas e apoiar avaliação, candidatura e preparação para entrevistas.
+Local job monitor with a FastAPI backend, React frontend, and workflows for OpenAI Codex. Built to centralize sources, collect job listings, prevent duplicates, and support evaluation, applications, and interview preparation.
 
-Adaptação independente para Codex; não afiliada nem mantida pela OpenAI. Workflows de candidatura baseados no projeto `ai-job-search`, de Mads Lorentzen, sob licença MIT.
+Independent Codex adaptation; neither affiliated with nor maintained by OpenAI. Application workflows are based on Mads Lorentzen's `ai-job-search` project, licensed under MIT.
 
-## Como funciona
+## How it works
 
-- Backend consulta fontes configuradas, normaliza vagas e salva dados em PostgreSQL no Docker ou SQLite no modo manual.
-- Frontend permite gerenciar fontes e visualizar resultados.
-- Agendador executa buscas periódicas.
-- Email e WhatsApp são opcionais e ficam desativados sem credenciais.
-- `.agents/skills/` contém workflows usados pelo Codex, incluindo `$setup`, `$scrape`, `$rank`, `$apply` e `$interview`.
+- The backend queries configured sources, normalizes listings, and stores data in PostgreSQL with Docker or SQLite in manual mode.
+- The frontend lets users manage sources and view results.
+- The scheduler runs periodic searches.
+- Email and WhatsApp are optional and remain disabled without credentials.
+- `.agents/skills/` contains Codex workflows, including `$setup`, `$scrape`, `$rank`, `$apply`, and `$interview`.
 
-## Rodar com Docker — recomendado
+## Running with Docker — recommended
 
-Pré-requisitos: Git e Docker Desktop/Engine com Compose.
+Requirements: Git and Docker Desktop/Engine with Compose.
 
 ```bash
 git clone https://github.com/lucaspwalter/job-scraper.git
@@ -26,21 +26,21 @@ cd job-scraper
 docker compose up --build
 ```
 
-Acesse:
+Open:
 
 - Interface: http://localhost:5173
 - API: http://localhost:8000
-- Documentação da API: http://localhost:8000/docs
+- API documentation: http://localhost:8000/docs
 
-Parar:
+To stop:
 
 ```bash
 docker compose down
 ```
 
-## Rodar manualmente — Linux/macOS
+## Running manually — Linux/macOS
 
-Requer Python 3.10+ e Node.js 20+.
+Requires Python 3.10+ and Node.js 20+.
 
 Terminal 1:
 
@@ -62,7 +62,7 @@ npm install
 npm start
 ```
 
-## Rodar manualmente — Windows PowerShell
+## Running manually — Windows PowerShell
 
 Terminal 1:
 
@@ -84,41 +84,41 @@ npm install
 npm start
 ```
 
-Se PowerShell bloquear ativação do ambiente, execute uma vez:
+If PowerShell blocks environment activation, run this once:
 
 ```powershell
 Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 ```
 
-## Usar com Codex
+## Using with Codex
 
-Na raiz do projeto:
+From the project root:
 
 ```bash
 codex
 ```
 
-Depois execute `$setup`. Dados pessoais gerados ficam ignorados pelo Git. Principais comandos:
+Then run `$setup`. Generated personal data is ignored by Git. Main commands:
 
-- `$scrape`: busca vagas.
-- `$rank`: classifica resultados.
-- `$apply <URL>`: avalia vaga e prepara candidatura.
-- `$interview`: prepara entrevista.
+- `$scrape`: searches for jobs.
+- `$rank`: ranks results.
+- `$apply <URL>`: evaluates a job and prepares an application.
+- `$interview`: prepares for an interview.
 
-## Configuração opcional
+## Optional configuration
 
-Edite `backend/.env` para notificações. Variáveis `SMTP_*`, `EVOLUTION_*` e `NOTIFY_*` podem permanecer vazias.
+Edit `backend/.env` to enable notifications. `SMTP_*`, `EVOLUTION_*`, and `NOTIFY_*` variables may remain empty.
 
-## Dados privados
+## Private data
 
-Não publique `.env`, banco SQLite, CVs pessoais, cartas geradas, documentos, rastreadores ou resultados de busca. `.gitignore` já protege esses caminhos.
+Do not publish `.env`, SQLite databases, personal résumés, generated cover letters, documents, trackers, or search results. `.gitignore` already protects these paths.
 
-## Testes
+## Tests
 
 ```bash
 python3 -m unittest discover -s tests
 ```
 
-## Licença
+## License
 
-MIT. Veja `LICENSE`.
+MIT. See `LICENSE`.
