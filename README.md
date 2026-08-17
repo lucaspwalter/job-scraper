@@ -2,38 +2,38 @@
   <img src="assets/mascot/pip_flight_loop.gif" alt="Job Scraper mascot" width="200">
 </p>
 
-# Job Scraper
+# Raspador de Trabalho
 
-Local job monitoring platform with a FastAPI backend, React frontend, and OpenAI Codex workflows.
+Plataforma de monitoramento de trabalho local com backend FastAPI, frontend React e fluxos de trabalho OpenAI Codex.
 
-## Overview
+## Visão geral
 
-Job Scraper centralizes sources, collects job listings, prevents duplicates, and supports evaluation, applications, and interview preparation.
+O Job Scraper centraliza fontes, coleta listas de empregos, evita duplicatas e oferece suporte à avaliação, inscrições e preparação para entrevistas.
 
-Independent Codex adaptation; neither affiliated with nor maintained by OpenAI. Application workflows are based on Mads Lorentzen's `ai-job-search` project, licensed under MIT.
+Adaptação independente do Codex; não é afiliado nem mantido pela OpenAI. Os fluxos de trabalho de aplicativos são baseados no projeto `ai-job-search` de Mads Lorentzen, licenciado pelo MIT.
 
-## Features
+## Características
 
-- The backend queries configured sources, normalizes listings, and stores data in PostgreSQL with Docker or SQLite in manual mode.
-- The frontend lets users manage sources and view results.
-- The scheduler runs periodic searches.
-- Email and WhatsApp are optional and remain disabled without credentials.
-- `.agents/skills/` contains Codex workflows, including `$setup`, `$scrape`, `$rank`, `$apply`, and `$interview`.
+- O backend consulta fontes configuradas, normaliza listagens e armazena dados em PostgreSQL com Docker ou SQLite em modo manual.
+- O frontend permite aos usuários gerenciar fontes e visualizar resultados.
+- O agendador executa pesquisas periódicas.
+- E-mail e WhatsApp são opcionais e permanecem desativados sem credenciais.
+- `.agents/skills/` contém fluxos de trabalho do Codex, incluindo `$setup`, `$scrape`, `$rank`, `$apply` e `$interview`.
 
-## Tech Stack
+## Pilha de tecnologia
 
-- Python and FastAPI
-- React
-- PostgreSQL with Docker
-- SQLite for manual local setup
-- Docker Compose
-- OpenAI Codex workflows
+- Python e FastAPI
+- Reagir
+- PostgreSQL com Docker
+- SQLite para configuração local manual
+- Docker Compor
+- Fluxos de trabalho do OpenAI Codex
 
-## Getting Started
+## Começando
 
-### Docker — recommended
+### Docker — recomendado
 
-Requirements: Git and Docker Desktop/Engine with Compose.
+Requisitos: Git e Docker Desktop/Engine com Compose.
 
 ```bash
 git clone https://github.com/lucaspwalter/job-scraper.git
@@ -41,21 +41,21 @@ cd job-scraper
 docker compose up --build
 ```
 
-Open:
+Abrir:
 
 - Interface: http://localhost:5173
 - API: http://localhost:8000
 - API documentation: http://localhost:8000/docs
 
-To stop:
+Para parar:
 
 ```bash
 docker compose down
 ```
 
-### Manual setup — Linux/macOS
+### Configuração manual — Linux/macOS
 
-Requires Python 3.10+ and Node.js 20+.
+Requer Python 3.10+ e Node.js 20+.
 
 Terminal 1:
 
@@ -77,7 +77,7 @@ npm install
 npm start
 ```
 
-### Manual setup — Windows PowerShell
+### Configuração manual — Windows PowerShell
 
 Terminal 1:
 
@@ -99,41 +99,41 @@ npm install
 npm start
 ```
 
-If PowerShell blocks environment activation, run this once:
+Se o PowerShell bloquear a ativação do ambiente, execute isto uma vez:
 
 ```powershell
 Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 ```
 
-## Using with Codex
+## Usando com Codex
 
-From the project root:
+Da raiz do projeto:
 
 ```bash
 codex
 ```
 
-Then run `$setup`. Generated personal data is ignored by Git. Main commands:
+Então execute `$setup`. Os dados pessoais gerados são ignorados pelo Git. Comandos principais:
 
-- `$scrape`: searches for jobs.
-- `$rank`: ranks results.
-- `$apply <URL>`: evaluates a job and prepares an application.
-- `$interview`: prepares for an interview.
+- `$scrape`: busca por empregos.
+- `$rank`: classifica os resultados.
+- `$apply <URL>`: avalia um trabalho e prepara uma aplicação.
+- `$entrevista`: prepara-se para uma entrevista.
 
-## Optional configuration
+## Configuração opcional
 
-Edit `backend/.env` to enable notifications. `SMTP_*`, `EVOLUTION_*`, and `NOTIFY_*` variables may remain empty.
+Edite `backend/.env` para ativar notificações. As variáveis ​​`SMTP_*`, `EVOLUTION_*` e `NOTIFY_*` podem permanecer vazias.
 
-## Private data
+## Dados privados
 
-Do not publish `.env`, SQLite databases, personal résumés, generated cover letters, documents, trackers, or search results. `.gitignore` already protects these paths.
+Não publique `.env`, bancos de dados SQLite, currículos pessoais, cartas de apresentação geradas, documentos, rastreadores ou resultados de pesquisa. `.gitignore` já protege esses caminhos.
 
-## Tests
+## Testes
 
 ```bash
 python3 -m unittest discover -s tests
 ```
 
-## License
+## Licença
 
-MIT. See `LICENSE`.
+MIT. Veja `LICENÇA`.
